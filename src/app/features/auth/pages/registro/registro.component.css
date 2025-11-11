@@ -45,23 +45,24 @@
   transform: scale(1.1);
 }
 
-/* ====== CONTENEDOR LOGIN ====== */
-.login-wrapper {
+/* ====== CONTENEDOR REGISTRO ====== */
+.registro-wrapper {
   position: relative;
   min-height: calc(100vh - 86px);
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 30px 0;
   overflow: hidden;
 }
 
-.login-background {
+.registro-background {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('/assets/img/Mexican-Pan-de-Dulce-1024x709.jpg');
+  background-image: url('/assets/img/pan-blanco-amish.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -69,58 +70,65 @@
   z-index: 1;
 }
 
-.login-container {
+.registro-container {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 450px;
+  max-width: 500px;
   padding: 20px;
 }
 
-.login-box {
+.registro-box {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 15px;
-  padding: 40px 35px;
+  padding: 35px 35px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
 }
 
-.login-title {
+.registro-title {
   text-align: center;
-  font-size: 2.2rem;
+  font-size: 2rem;
+  color: #3b1e05;
+  margin: 0 0 5px 0;
+  font-weight: 600;
+}
+
+.registro-subtitle {
+  text-align: center;
+  font-size: 1.5rem;
   font-family: 'Edwardian Script ITC', 'Brush Script MT', cursive;
   font-style: italic;
-  color: #3b1e05;
-  margin: 0 0 30px 0;
+  color: #654321;
+  margin: 0 0 25px 0;
   font-weight: 400;
 }
 
 /* ====== FORMULARIO ====== */
-.login-form {
+.registro-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .form-label {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: #3b1e05;
   font-weight: 500;
-  font-style: italic;
 }
 
 .form-input {
   width: 100%;
-  padding: 12px 15px;
+  padding: 11px 14px;
   border: 2px solid #d6b48b;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   background-color: rgba(255, 255, 255, 0.9);
   transition: all 0.3s ease;
   box-sizing: border-box;
@@ -163,7 +171,6 @@
   font-size: 0.9rem;
   color: #5c5c5c;
   cursor: pointer;
-  font-style: italic;
 }
 
 /* ====== MENSAJES ====== */
@@ -171,61 +178,69 @@
   background-color: #ffe6e6;
   border: 1px solid #ff4444;
   color: #cc0000;
-  padding: 12px;
+  padding: 10px;
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.success-message {
+  background-color: #e6ffe6;
+  border: 1px solid #44ff44;
+  color: #008800;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.88rem;
   text-align: center;
 }
 
 /* ====== BOTÓN ====== */
-.btn-acceder {
+.btn-registrar {
   width: 100%;
-  padding: 15px;
+  padding: 14px;
   background: linear-gradient(135deg, #654321 0%, #8B4513 100%);
   color: #fff;
   border: none;
   border-radius: 8px;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 600;
-  font-style: italic;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
-.btn-acceder:hover:not(:disabled) {
+.btn-registrar:hover:not(:disabled) {
   background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
-.btn-acceder:active:not(:disabled) {
+.btn-registrar:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.btn-acceder:disabled {
+.btn-registrar:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* ====== ENLACE REGISTRO ====== */
-.registro-link {
+/* ====== ENLACE LOGIN ====== */
+.login-link {
   text-align: center;
   font-size: 0.95rem;
   color: #5c5c5c;
-  font-style: italic;
   margin-top: 5px;
 }
 
-.registro-link a {
+.login-link a {
   color: #8B4513;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s;
 }
 
-.registro-link a:hover {
+.login-link a:hover {
   color: #654321;
   text-decoration: underline;
 }
@@ -244,21 +259,29 @@
     height: 40px;
   }
 
-  .login-container {
+  .registro-wrapper {
+    padding: 20px 0;
+  }
+
+  .registro-container {
     padding: 15px;
   }
 
-  .login-box {
-    padding: 30px 25px;
+  .registro-box {
+    padding: 28px 22px;
   }
 
-  .login-title {
-    font-size: 1.8rem;
+  .registro-title {
+    font-size: 1.7rem;
   }
 
-  .btn-acceder {
-    font-size: 1.1rem;
-    padding: 13px;
+  .registro-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .btn-registrar {
+    font-size: 1.05rem;
+    padding: 12px;
   }
 }
 
@@ -267,20 +290,28 @@
     font-size: 1.2rem;
   }
 
-  .login-box {
-    padding: 25px 20px;
+  .registro-box {
+    padding: 24px 18px;
   }
 
-  .login-title {
-    font-size: 1.6rem;
+  .registro-title {
+    font-size: 1.5rem;
+  }
+
+  .registro-subtitle {
+    font-size: 1.2rem;
   }
 
   .form-label {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .form-input {
     padding: 10px 12px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+  }
+
+  .registro-form {
+    gap: 14px;
   }
 }

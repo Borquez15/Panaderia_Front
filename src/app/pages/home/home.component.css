@@ -1,0 +1,338 @@
+/* ====== ICONOS ====== */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+
+/* ====== GENERAL ====== */
+body {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  background-color: #1a1a1a;
+  color: #3b1e05;
+}
+
+/* ====== NAVBAR ====== */
+.navbar {
+  background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
+  color: #fff;
+  padding: 18px 0;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.titulo {
+  flex: 1;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 400;
+  font-family: 'Edwardian Script ITC', 'Brush Script MT', cursive;
+  letter-spacing: 1px;
+  font-style: italic;
+}
+
+.logo {
+  height: 50px;
+  filter: brightness(1.1);
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.menu-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ====== GALERÍA ====== */
+.galeria {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #2a2a2a 0%, #1f1f1f 100%);
+  border-top: 4px solid #654321;
+  border-bottom: 4px solid #654321;
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.galeria-img {
+  text-align: center;
+  flex: 0 0 auto;
+  position: relative;
+  padding: 15px 10px;
+}
+
+.galeria-img img {
+  height: 140px;
+  width: 140px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 4px solid #654321;
+  background-color: #fff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.galeria-img img:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+}
+
+.galeria-img p {
+  margin-top: 8px;
+  font-weight: 600;
+  color: #f5deb3;
+  font-size: 0.95rem;
+  font-family: 'Brush Script MT', cursive;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* ====== CONTENIDO ====== */
+.contenido {
+  text-align: center;
+  padding: 50px 15%;
+  background: linear-gradient(180deg, #f5f5f0 0%, #ffffff 50%, #f5f5f0 100%);
+  position: relative;
+}
+
+.contenido::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #654321, transparent);
+}
+
+.contenido h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #3b1e05;
+  font-family: 'Edwardian Script ITC', 'Brush Script MT', cursive;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.decoracion {
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #8B4513, transparent);
+  margin: 0 auto 25px;
+}
+
+.contenido p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  color: #2a2a2a;
+  text-align: justify;
+  text-justify: inter-word;
+  font-family: 'Georgia', serif;
+}
+
+/* ====== BOTÓN ORDENAR ====== */
+.ordenar-container {
+  text-align: center;
+  padding: 50px 0 80px 0;
+  background: linear-gradient(180deg, #f5f5f0 0%, #e8e8e0 100%);
+}
+
+.btn-orden {
+  background: linear-gradient(135deg, #654321 0%, #8B4513 100%);
+  color: #fff;
+  border: 3px solid #4a3319;
+  padding: 18px 80px;
+  font-size: 1.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.btn-orden:hover {
+  background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.btn-orden:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* ====== SCROLLBAR PERSONALIZADA ====== */
+.galeria::-webkit-scrollbar {
+  height: 8px;
+}
+
+.galeria::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.galeria::-webkit-scrollbar-thumb {
+  background: #654321;
+  border-radius: 4px;
+}
+
+.galeria::-webkit-scrollbar-thumb:hover {
+  background: #8B4513;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0 20px;
+  }
+
+  .titulo {
+    font-size: 1.4rem;
+  }
+
+  .logo {
+    height: 40px;
+  }
+
+  .galeria-img img {
+    height: 110px;
+    width: 110px;
+  }
+
+  .galeria-img p {
+    font-size: 0.85rem;
+  }
+
+  .contenido {
+    padding: 40px 8%;
+  }
+
+  .contenido h2 {
+    font-size: 2rem;
+  }
+
+  .contenido p {
+    font-size: 0.9rem;
+  }
+
+  .btn-orden {
+    font-size: 1.2rem;
+    padding: 15px 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .titulo {
+    font-size: 1.2rem;
+  }
+
+  .galeria-img img {
+    height: 90px;
+    width: 90px;
+  }
+
+  .contenido h2 {
+    font-size: 1.8rem;
+  }
+
+  .btn-orden {
+    font-size: 1.1rem;
+    padding: 12px 40px;
+  }
+}
+
+/* ====== SIDEBAR ====== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -260px;
+  width: 240px;
+  height: 100%;
+  background-color: #fff;
+  color: #4a3319;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.3);
+  transition: right 0.4s ease;
+  z-index: 1000;
+  padding-top: 70px;
+}
+
+.sidebar.open {
+  right: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 15px 25px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #dcdcdc;
+  color: #5c2e0a;
+  transition: background 0.2s;
+}
+
+.sidebar ul li:hover {
+  background-color: #f8f4ef;
+}
+
+.sidebar ul li i {
+  color: #8b4513;
+  font-size: 1.2rem;
+}
+
+.cerrar-sesion {
+  position: absolute;
+  bottom: 30px;
+  left: 25px;
+  font-size: 1rem;
+  color: #8b4513;
+  cursor: pointer;
+  border-top: 1px solid #dcdcdc;
+  padding-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.cerrar-sesion i {
+  color: #8b4513;
+}
+
+.texto-intro {
+  max-width: 800px;
+  margin: 0 auto 25px auto;
+  text-align: center;
+  line-height: 1.8;
+  color: #3b1e05;
+  font-size: 1rem;
+  font-family: 'Georgia', serif;
+}
+
+.texto-intro strong {
+  color: #8B4513;
+  font-weight: bold;
+}

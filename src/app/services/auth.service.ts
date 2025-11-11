@@ -10,6 +10,7 @@ export interface User {
   email: string;
   telefono?: string;
   is_admin: boolean;
+  is_active: boolean;
 }
 
 export interface LoginCredentials {
@@ -86,6 +87,10 @@ export class AuthService {
 
   getToken(): string | null {
     return this.token();
+  }
+
+  getCurrentUser(): User | null {
+    return this.currentUser();
   }
 
   private setSession(authResult: AuthResponse): void {

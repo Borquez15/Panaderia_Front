@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
-import { CartService, CartItem } from '../../../../core/services/cart.service';
+import { CartService, CartItem } from '../../../../services/cart.service';
 
 @Component({
   selector: 'app-ver-carrito',

@@ -1,0 +1,160 @@
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="navbar-container">
+    <img src="/assets/img/logo_pan.png" alt="Logo" class="logo" />
+    <h1 class="titulo">Panaderia el Dan</h1>
+    <button class="menu-btn">&#9776;</button>
+  </div>
+</header>
+
+<!-- CONTENEDOR REGISTRO -->
+<div class="registro-wrapper">
+  <div class="registro-background"></div>
+  
+  <div class="registro-container">
+    <div class="registro-box">
+      <!-- Título -->
+      <h2 class="registro-title">Crear Cuenta</h2>
+      <p class="registro-subtitle">Panaderia el Dan</p>
+      
+      <!-- Formulario -->
+      <form (ngSubmit)="onSubmit()" class="registro-form">
+        <!-- Nombre -->
+        <div class="form-group">
+          <label for="nombre" class="form-label">Nombre *</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            [(ngModel)]="nombre"
+            class="form-input"
+            placeholder="Juan"
+            required
+            [disabled]="isLoading"
+          />
+        </div>
+
+        <!-- Apellido Paterno -->
+        <div class="form-group">
+          <label for="ap_p" class="form-label">Apellido Paterno *</label>
+          <input
+            type="text"
+            id="ap_p"
+            name="ap_p"
+            [(ngModel)]="ap_p"
+            class="form-input"
+            placeholder="Pérez"
+            required
+            [disabled]="isLoading"
+          />
+        </div>
+
+        <!-- Apellido Materno -->
+        <div class="form-group">
+          <label for="ap_m" class="form-label">Apellido Materno</label>
+          <input
+            type="text"
+            id="ap_m"
+            name="ap_m"
+            [(ngModel)]="ap_m"
+            class="form-input"
+            placeholder="García (opcional)"
+            [disabled]="isLoading"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email" class="form-label">Email *</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="email"
+            class="form-input"
+            placeholder="correo@ejemplo.com"
+            required
+            [disabled]="isLoading"
+          />
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group">
+          <label for="password" class="form-label">Contraseña *</label>
+          <div class="password-wrapper">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              [(ngModel)]="password"
+              class="form-input"
+              placeholder="Mínimo 6 caracteres"
+              required
+              minlength="6"
+              [disabled]="isLoading"
+            />
+          </div>
+        </div>
+
+        <!-- Confirmar Contraseña -->
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">Confirmar Contraseña *</label>
+          <div class="password-wrapper">
+            <input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              id="confirmPassword"
+              name="confirmPassword"
+              [(ngModel)]="confirmPassword"
+              class="form-input"
+              placeholder="Repite tu contraseña"
+              required
+              [disabled]="isLoading"
+            />
+          </div>
+        </div>
+
+        <!-- Checkbox Mostrar Contraseñas -->
+        <div class="form-check">
+          <input
+            type="checkbox"
+            id="showPasswords"
+            [(ngModel)]="showPassword"
+            (change)="showConfirmPassword = showPassword"
+            name="showPasswords"
+            class="form-checkbox"
+            [disabled]="isLoading"
+          />
+          <label for="showPasswords" class="form-check-label">
+            Mostrar contraseñas
+          </label>
+        </div>
+
+        <!-- Mensaje de Error -->
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Mensaje de Éxito -->
+        <div *ngIf="successMessage" class="success-message">
+          {{ successMessage }}
+        </div>
+
+        <!-- Botón Registrar -->
+        <button 
+          type="submit" 
+          class="btn-registrar"
+          [disabled]="isLoading"
+        >
+          <span *ngIf="!isLoading">Registrarse</span>
+          <span *ngIf="isLoading">Registrando...</span>
+        </button>
+
+        <!-- Enlace a Login -->
+        <div class="login-link">
+          <span>¿Ya tienes cuenta? </span>
+          <a routerLink="/login">Inicia sesión</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

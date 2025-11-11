@@ -1,0 +1,63 @@
+<header class="navbar">
+  <div class="navbar-container">
+    <img src="assets/img/logo_pan.png" alt="Logo" class="logo" />
+    <h1 class="titulo">Panadería El Dan</h1>
+    <button class="menu-btn" (click)="toggleSidebar()">&#9776;</button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div class="sidebar" [class.open]="sidebarVisible">
+  <ul>
+    <li (click)="navigateTo('')"><i class="fa-solid fa-house"></i> Inicio</li>
+    <li (click)="navigateTo('/carrito')"><i class="fa-solid fa-cart-shopping"></i> Carrito</li>
+    <li (click)="navigateTo('/favoritos')"><i class="fa-solid fa-heart"></i> Favoritos</li>
+    <li (click)="navigateTo('/historial')"><i class="fa-solid fa-clock-rotate-left"></i> Historial</li>
+    <li (click)="navigateTo('/pendientes')"><i class="fa-solid fa-wallet"></i> Pago pendiente</li>
+    <li (click)="navigateTo('/perfil')"><i class="fa-solid fa-user"></i> Usuario</li>
+  </ul>
+
+  <div class="cerrar-sesion" (click)="cerrarSesion()">
+    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+  </div>
+</div>
+
+<!-- GALERÍA SUPERIOR -->
+<section class="galeria">
+  <div class="galeria-img" *ngFor="let producto of productos">
+    <img [src]="producto.imagen" [alt]="producto.nombre" />
+    <p>{{ producto.nombre }}</p>
+  </div>
+</section>
+
+<!-- SECCIÓN CENTRAL -->
+<section class="contenido">
+  <h2>Panadería El Dan</h2>
+  <div class="decoracion"></div>
+  <p class="texto-intro">
+    En <strong>Panadería El Dan</strong> creemos que el pan es mucho más que un alimento: es tradición, aroma y hogar.  
+    Nacimos con la idea de mantener viva la panadería artesanal, usando ingredientes de calidad y recetas que evocan los mejores recuerdos de nuestra tierra.
+  </p>
+  <p class="texto-intro">
+    Desde <strong>Los Mochis, Sinaloa</strong>, compartimos con orgullo el sabor auténtico del pan hecho a mano.  
+    Cada pieza es el resultado de dedicación, paciencia y amor por lo que hacemos.
+  </p>
+  <p class="texto-intro">
+    Hoy te damos la bienvenida a nuestro sitio, donde podrás descubrir nuestros productos, conocer nuestras historias  
+    y dejarte tentar por el inconfundible olor del pan recién horneado.  
+    ¡Porque en Panadería El Dan, horneamos con el corazón!
+  </p>
+</section>
+
+<!-- GALERÍA INFERIOR -->
+<section class="galeria galeria-bottom">
+  <div class="galeria-img" *ngFor="let producto of productos">
+    <img [src]="producto.imagen" [alt]="producto.nombre" />
+    <p>{{ producto.nombre }}</p>
+  </div>
+</section>
+
+<!-- BOTÓN FINAL -->
+<div class="ordenar-container">
+  <button class="btn-orden" (click)="irATienda()">ORDENE YA</button>
+</div>

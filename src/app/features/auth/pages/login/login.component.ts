@@ -1,58 +1,75 @@
-// ============================================
-// FILE: src/app/features/auth/pages/login/login.component.ts
-// ============================================
-
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../../services/auth.service';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService, LoginCredentials } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  loading = signal(false);
-  errorMessage = signal('');
+  email: string = '';
+  password: string = '';
+  showPassword: boolean = false;
+  errorMessage: string = '';
+  isLoading: boolean = false;
 
-  loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
-  });
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 
   async onSubmit() {
-    if (this.loginForm.invalid) {
-      this.markFormGroupTouched(this.loginForm);
+    // Validaciones básicas
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Por favor completa todos los campos';
       return;
     }
 
-    this.loading.set(true);
-    this.errorMessage.set('');
+    if (!this.isValidEmail(this.email)) {
+      this.errorMessage = 'Por favor ingresa un email válido';
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const credentials: LoginCredentials = {
+      email: this.email.toLowerCase().trim(),
+      password: this.password
+    };
 
     try {
-      await this.authService.login(this.loginForm.value);
+      await this.authService.login(credentials);
+      console.log('Login exitoso');
+      
+      // Redirigir al home
       this.router.navigate(['/']);
     } catch (error: any) {
-      this.errorMessage.set(
-        error?.error?.detail || 'Credenciales incorrectas. Por favor, intenta de nuevo.'
-      );
+      console.error('Error en login:', error);
+      
+      if (error.status === 401) {
+        this.errorMessage = 'Credenciales inválidas. Verifica tu email y contraseña.';
+      } else if (error.status === 403) {
+        this.errorMessage = 'Tu cuenta está inactiva. Contacta al administrador.';
+      } else if (error.status === 0) {
+        this.errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.';
+      } else {
+        this.errorMessage = error.error?.detail || 'Error al iniciar sesión. Intenta nuevamente.';
+      }
     } finally {
-      this.loading.set(false);
+      this.isLoading = false;
     }
   }
 
-  private markFormGroupTouched(formGroup: FormGroup) {
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-      control?.markAsTouched();
-    });
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 }
