@@ -1,0 +1,90 @@
+
+<div class="login-container">
+  <div class="login-card">
+    <!-- Header con logo -->
+    <div class="login-header">
+      <div class="logo-container">
+        <img src="/assets/images/logo.png" alt="Panadería el Dan" class="logo">
+      </div>
+      <h1 class="login-title">Panadería el Dan</h1>
+    </div>
+
+    <!-- Imagen de fondo decorativa -->
+    <div class="background-image">
+      <img src="/assets/images/pan-background.jpg" alt="Productos de panadería">
+    </div>
+
+    <!-- Formulario de login -->
+    <div class="login-form-container">
+      <h2 class="form-title">Ingresa tus datos:</h2>
+
+      @if (errorMessage()) {
+        <div class="error-message">
+          <svg class="error-icon" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+          </svg>
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email" class="form-label">Correo</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="form-input"
+            [class.error]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
+            placeholder="ejemplo@correo.com"
+          >
+          @if (loginForm.get('email')?.touched && loginForm.get('email')?.hasError('required')) {
+            <span class="field-error">El correo es requerido</span>
+          }
+          @if (loginForm.get('email')?.touched && loginForm.get('email')?.hasError('email')) {
+            <span class="field-error">Ingresa un correo válido</span>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password" class="form-label">Contraseña</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            class="form-input"
+            [class.error]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
+            placeholder="••••••••"
+          >
+          @if (loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')) {
+            <span class="field-error">La contraseña es requerida</span>
+          }
+          @if (loginForm.get('password')?.touched && loginForm.get('password')?.hasError('minlength')) {
+            <span class="field-error">Mínimo 6 caracteres</span>
+          }
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="loading()"
+        >
+          @if (loading()) {
+            <span class="loading-spinner"></span>
+            Ingresando...
+          } @else {
+            Acceder
+          }
+        </button>
+      </form>
+
+      <!-- Link de registro -->
+      <div class="register-link">
+        <p>¿No tienes cuenta? <a routerLink="/registro">Regístrate aquí</a></p>
+      </div>
+    </div>
+  </div>
+</div>
