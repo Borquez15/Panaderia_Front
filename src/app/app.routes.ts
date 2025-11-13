@@ -49,6 +49,11 @@ export const routes: Routes = [
       import('./features/auth/pages/login/login.component').then((m) => m.LoginComponent),
   },
   {
+    path: 'favoritos',
+    loadComponent: () =>
+      import('./pages/favoritos/favoritos.component').then((m) => m.FavoritosComponent),
+  },
+  {
   path: 'registro',
   loadComponent: () =>
     import('./features/auth/pages/registro/registro.component').then((m) => m.RegistroComponent),

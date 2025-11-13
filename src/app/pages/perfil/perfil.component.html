@@ -1,0 +1,147 @@
+<!-- src/app/pages/perfil/perfil.component.html -->
+<div class="perfil-page">
+  <!-- HEADER -->
+  <header class="perfil-header">
+    <div class="perfil-header-inner">
+      <div class="perfil-logo">
+        <img src="assets/img/logo_pan.png" alt="Logo Panadería El Dan" />
+        <div class="perfil-header-text">
+          <h1>Panadería El Dan</h1>
+          <p>Tu cuenta y tus negocios</p>
+        </div>
+      </div>
+
+      <a routerLink="/productos" class="perfil-btn-outline">
+        🥖 Ir a la tienda
+      </a>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="perfil-main">
+    <!-- LOADING -->
+    <section *ngIf="isLoading" class="perfil-center-card">
+      <div class="perfil-spinner"></div>
+      <p>Cargando tu información...</p>
+    </section>
+
+    <!-- ERROR -->
+    <section *ngIf="!isLoading && error" class="perfil-center-card perfil-error">
+      <h2>Ups...</h2>
+      <p>{{ error }}</p>
+      <a routerLink="/login" class="perfil-btn-primary">
+        Iniciar sesión
+      </a>
+    </section>
+
+    <!-- PERFIL -->
+    <section *ngIf="!isLoading && !error">
+      <!-- HEADER DE USUARIO -->
+      <div class="perfil-user-card" *ngIf="usuario as u">
+        <div class="perfil-avatar">
+          <span>{{ inicialNombre }}</span>
+        </div>
+        <div class="perfil-user-info">
+          <p class="perfil-saludo">Hola,</p>
+          <h2 class="perfil-nombre">{{ u.nombre }}</h2>
+          <p class="perfil-email">{{ u.email }}</p>
+          <p class="perfil-rol" *ngIf="u.rol">
+            Rol en la plataforma: <strong>{{ u.rol }}</strong>
+          </p>
+          <p class="perfil-subtext">
+            Desde aquí puedes gestionar tu perfil, tus empresas y tus panaderías.
+          </p>
+        </div>
+      </div>
+
+      <!-- SI NO HAY USUARIO (por si el backend no responde con datos) -->
+      <div class="perfil-user-card perfil-user-card-empty" *ngIf="!usuario && !isLoading && !error">
+        <div class="perfil-avatar perfil-avatar-ghost">
+          <span>?</span>
+        </div>
+        <div class="perfil-user-info">
+          <h2 class="perfil-nombre">Invitado</h2>
+          <p class="perfil-subtext">
+            Inicia sesión para ver y administrar tus datos y negocios.
+          </p>
+          <a routerLink="/login" class="perfil-btn-primary">
+            Iniciar sesión
+          </a>
+        </div>
+      </div>
+
+      <!-- GRID DE OPCIONES -->
+      <section class="perfil-grid">
+        <!-- Mis datos -->
+        <article class="perfil-card">
+          <div class="perfil-card-icon icon-azul">👤</div>
+          <h3>Mis datos</h3>
+          <p>
+            Próximamente podrás editar tu nombre, correo, contraseña y foto de perfil.
+          </p>
+          <button class="perfil-btn-disabled" disabled>Próximamente</button>
+        </article>
+
+        <!-- Mis empresas -->
+        <article class="perfil-card">
+          <div class="perfil-card-icon icon-verde">🏢</div>
+          <h3>Mis empresas</h3>
+          <p>
+            Administra tus empresas y panaderías registradas, revisa su estado y accede a sus productos.
+          </p>
+          <a routerLink="/perfil/mis-empresas" class="perfil-btn-primary">
+            Ir a mis empresas
+          </a>
+        </article>
+
+        <!-- Registrar negocio -->
+        <article class="perfil-card">
+          <div class="perfil-card-icon icon-amarillo">➕</div>
+          <h3>Registrar negocio</h3>
+          <p>
+            Registra una nueva empresa o panadería para vender o hacer pedidos en la plataforma.
+          </p>
+          <a routerLink="/perfil/registrar-empresa" class="perfil-btn-primary">
+            Registrar negocio
+          </a>
+        </article>
+
+        <!-- Mis pedidos -->
+        <article class="perfil-card">
+          <div class="perfil-card-icon icon-cafe">🧾</div>
+          <h3>Mis pedidos</h3>
+          <p>
+            Consulta el historial de tus compras, estados de pedido y detalles de entrega.
+          </p>
+          <a routerLink="/mis-pedidos" class="perfil-btn-secondary">
+            Ver mis pedidos
+          </a>
+        </article>
+
+        <!-- Carrito -->
+        <article class="perfil-card">
+          <div class="perfil-card-icon icon-cafe-oscuro">🛒</div>
+          <h3>Carrito</h3>
+          <p>
+            Revisa los productos que tienes agregados para comprar después.
+          </p>
+          <a routerLink="/carrito" class="perfil-btn-secondary">
+            Ir al carrito
+          </a>
+        </article>
+
+        <!-- Favoritos -->
+        <article class="perfil-card">
+          <div class="perfil-card-icon icon-rosa">❤️</div>
+          <h3>Favoritos</h3>
+          <p>
+            Guarda tus panes y productos favoritos para encontrarlos rápidamente.
+          </p>
+          <a routerLink="/favoritos" class="perfil-btn-secondary">
+            Ver favoritos
+          </a>
+        </article>
+      </section>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,339 @@
+/* Fondo general */
+.perfil-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f5f5f0 0%, #ffffff 100%);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* HEADER */
+.perfil-header {
+  background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+}
+
+.perfil-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.perfil-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.perfil-logo img {
+  height: 48px;
+  width: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.perfil-header-text h1 {
+  margin: 0;
+  font-size: 1.7rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.perfil-header-text p {
+  margin: 2px 0 0;
+  font-size: 0.9rem;
+  color: #f8eadd;
+}
+
+/* BOTONES DEL HEADER */
+.perfil-btn-outline {
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: 2px solid #f5e0c3;
+  background: transparent;
+  color: #fff7e9;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.perfil-btn-outline:hover {
+  background: rgba(245, 224, 195, 0.15);
+  transform: translateY(-1px);
+}
+
+/* CONTENIDO PRINCIPAL */
+.perfil-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+/* CARD CENTRADA (loading o error) */
+.perfil-center-card {
+  max-width: 480px;
+  margin: 60px auto 0;
+  padding: 24px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.perfil-center-card p {
+  margin-top: 10px;
+  color: #5a4631;
+}
+
+.perfil-error {
+  border-left: 4px solid #e74c3c;
+}
+
+/* SPINNER */
+.perfil-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid #f3e5d8;
+  border-top-color: #8b4513;
+  margin: 0 auto;
+  animation: perfil-spin 0.9s linear infinite;
+}
+
+@keyframes perfil-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* TARJETA DE USUARIO */
+.perfil-user-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 22px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fffaf3 0%, #f3e1c9 100%);
+  box-shadow: 0 10px 25px rgba(139, 69, 19, 0.18);
+  border: 1px solid rgba(139, 69, 19, 0.12);
+  margin-bottom: 26px;
+}
+
+.perfil-user-card-empty {
+  justify-content: flex-start;
+}
+
+/* AVATAR */
+.perfil-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 20%, #fef3c7, #b45309);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fffdf5;
+  font-weight: 700;
+  font-size: 2rem;
+  box-shadow: 0 6px 16px rgba(180, 83, 9, 0.4);
+}
+
+.perfil-avatar-ghost {
+  background: radial-gradient(circle at 30% 20%, #e5e7eb, #9ca3af);
+  box-shadow: 0 6px 16px rgba(107, 114, 128, 0.4);
+}
+
+/* INFO DE USUARIO */
+.perfil-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.perfil-saludo {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #7c6141;
+}
+
+.perfil-nombre {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #3b1e05;
+}
+
+.perfil-email {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #5c4a30;
+}
+
+.perfil-rol {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: #7c6141;
+}
+
+.perfil-subtext {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #8b7350;
+}
+
+/* GRID DE TARJETAS */
+.perfil-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 18px;
+}
+
+/* TARJETA */
+.perfil-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(148, 119, 80, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.perfil-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.1);
+}
+
+/* ICONO EN LA TARJETA */
+.perfil-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.icon-azul {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.icon-verde {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.icon-amarillo {
+  background: #fef9c3;
+  color: #92400e;
+}
+
+.icon-cafe {
+  background: #f3e2d2;
+  color: #8b4513;
+}
+
+.icon-cafe-oscuro {
+  background: #ede0d4;
+  color: #5a3414;
+}
+
+.icon-rosa {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* TÍTULO Y TEXTO */
+.perfil-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #3b1e05;
+}
+
+.perfil-card p {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: #6b4a28;
+  line-height: 1.4;
+}
+
+/* BOTONES GENERALES */
+.perfil-btn-primary,
+.perfil-btn-secondary,
+.perfil-btn-disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+/* Botón primario café */
+.perfil-btn-primary {
+  background: linear-gradient(135deg, #654321 0%, #8b4513 100%);
+  color: #fff7ec;
+  box-shadow: 0 6px 16px rgba(101, 67, 33, 0.45);
+}
+
+.perfil-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(101, 67, 33, 0.6);
+}
+
+/* Botón secundario claro */
+.perfil-btn-secondary {
+  background: #fefaf5;
+  color: #5a3414;
+  border: 1px solid #e4d2bd;
+}
+
+.perfil-btn-secondary:hover {
+  background: #f7e3c8;
+}
+
+/* Botón deshabilitado */
+.perfil-btn-disabled {
+  background: #e5e7eb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .perfil-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .perfil-user-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .perfil-avatar {
+    width: 56px;
+    height: 56px;
+    font-size: 1.6rem;
+  }
+}

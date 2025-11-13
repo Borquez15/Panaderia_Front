@@ -1,0 +1,444 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="container-custom max-w-4xl">
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">
+        Registrar {{ tipoRegistro === 'empresa' ? 'Empresa' : 'Panadería' }}
+      </h1>
+      <p class="text-gray-600">
+        Completa el formulario para registrar tu {{ tipoRegistro }}
+      </p>
+    </div>
+
+    <!-- Selector de tipo -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">Tipo de registro</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <button
+          type="button"
+          (click)="cambiarTipo('empresa')"
+          class="p-4 rounded-lg border-2 transition-all"
+          [ngClass]="{
+            'border-primary-500 bg-primary-50': tipoRegistro === 'empresa',
+            'border-gray-300 hover:border-primary-300': tipoRegistro !== 'empresa'
+          }"
+        >
+          <div class="text-4xl mb-2">🏢</div>
+          <div class="font-semibold">Empresa / Negocio</div>
+          <div class="text-sm text-gray-600">Cafetería, restaurante, hotel, etc.</div>
+        </button>
+
+        <button
+          type="button"
+          (click)="cambiarTipo('panaderia')"
+          class="p-4 rounded-lg border-2 transition-all"
+          [ngClass]="{
+            'border-primary-500 bg-primary-50': tipoRegistro === 'panaderia',
+            'border-gray-300 hover:border-primary-300': tipoRegistro !== 'panaderia'
+          }"
+        >
+          <div class="text-4xl mb-2">🥖</div>
+          <div class="font-semibold">Panadería</div>
+          <div class="text-sm text-gray-600">Vendo productos de panadería</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      @if (tipoRegistro === 'empresa') {
+        <!-- FORMULARIO EMPRESA -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 class="text-xl font-bold text-gray-900 mb-4">Información General</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Nombre Comercial *
+              </label>
+              <input
+                type="text"
+                formControlName="nombre_comercial"
+                class="input-field"
+                placeholder="Ej: Café Central"
+              />
+              @if (form.get('nombre_comercial')?.invalid && form.get('nombre_comercial')?.touched) {
+                <p class="text-red-500 text-sm mt-1">Campo requerido</p>
+              }
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Razón Social *
+              </label>
+              <input
+                type="text"
+                formControlName="razon_social"
+                class="input-field"
+                placeholder="Café Central SA de CV"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                RFC *
+              </label>
+              <input
+                type="text"
+                formControlName="rfc"
+                class="input-field"
+                placeholder="CAC20010101ABC"
+                maxlength="13"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Tipo de Empresa *
+              </label>
+              <select formControlName="tipo_empresa" class="input-field">
+                <option value="">Seleccionar...</option>
+                <option value="cafeteria">Cafetería</option>
+                <option value="restaurante">Restaurante</option>
+                <option value="hotel">Hotel</option>
+                <option value="distribuidor">Distribuidor</option>
+                <option value="panaderia">Panadería</option>
+                <option value="supermercado">Supermercado</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Email de Facturación *
+              </label>
+              <input
+                type="email"
+                formControlName="email_facturacion"
+                class="input-field"
+                placeholder="facturacion@empresa.com"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Teléfono *
+              </label>
+              <input
+                type="tel"
+                formControlName="telefono"
+                class="input-field"
+                placeholder="6681234567"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Teléfono Alternativo
+              </label>
+              <input
+                type="tel"
+                formControlName="telefono_alternativo"
+                class="input-field"
+                placeholder="6681234568"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Dirección Fiscal -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 class="text-xl font-bold text-gray-900 mb-4">Dirección Fiscal</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Calle *
+              </label>
+              <input
+                type="text"
+                formControlName="calle_fiscal"
+                class="input-field"
+                placeholder="Av. Revolución"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Número Exterior *
+              </label>
+              <input
+                type="text"
+                formControlName="numero_exterior_fiscal"
+                class="input-field"
+                placeholder="123"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Número Interior
+              </label>
+              <input
+                type="text"
+                formControlName="numero_interior_fiscal"
+                class="input-field"
+                placeholder="A"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Colonia *
+              </label>
+              <input
+                type="text"
+                formControlName="colonia_fiscal"
+                class="input-field"
+                placeholder="Centro"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Ciudad *
+              </label>
+              <input
+                type="text"
+                formControlName="ciudad_fiscal"
+                class="input-field"
+                placeholder="Los Mochis"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Estado *
+              </label>
+              <input
+                type="text"
+                formControlName="estado_fiscal"
+                class="input-field"
+                placeholder="Sinaloa"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Código Postal *
+              </label>
+              <input
+                type="text"
+                formControlName="codigo_postal_fiscal"
+                class="input-field"
+                placeholder="81200"
+                maxlength="10"
+              />
+            </div>
+          </div>
+        </div>
+      } @else {
+        <!-- FORMULARIO PANADERÍA -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 class="text-xl font-bold text-gray-900 mb-4">Información de la Panadería</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Nombre de la Panadería *
+              </label>
+              <input
+                type="text"
+                formControlName="nombre"
+                class="input-field"
+                placeholder="Panadería El Dan"
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Descripción
+              </label>
+              <textarea
+                formControlName="descripcion"
+                class="input-field"
+                rows="3"
+                placeholder="Describe tu panadería..."
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Email *
+              </label>
+              <input
+                type="email"
+                formControlName="email"
+                class="input-field"
+                placeholder="contacto@panaderia.com"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Teléfono *
+              </label>
+              <input
+                type="tel"
+                formControlName="telefono"
+                class="input-field"
+                placeholder="6681234567"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                WhatsApp
+              </label>
+              <input
+                type="tel"
+                formControlName="whatsapp"
+                class="input-field"
+                placeholder="6681234567"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Dirección Panadería -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 class="text-xl font-bold text-gray-900 mb-4">Dirección</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Calle *
+              </label>
+              <input
+                type="text"
+                formControlName="calle"
+                class="input-field"
+                placeholder="Av. Revolución"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Número Exterior *
+              </label>
+              <input
+                type="text"
+                formControlName="numero_exterior"
+                class="input-field"
+                placeholder="123"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Número Interior
+              </label>
+              <input
+                type="text"
+                formControlName="numero_interior"
+                class="input-field"
+                placeholder="A"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Colonia *
+              </label>
+              <input
+                type="text"
+                formControlName="colonia"
+                class="input-field"
+                placeholder="Centro"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Ciudad *
+              </label>
+              <input
+                type="text"
+                formControlName="ciudad"
+                class="input-field"
+                placeholder="Los Mochis"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Estado *
+              </label>
+              <input
+                type="text"
+                formControlName="estado"
+                class="input-field"
+                placeholder="Sinaloa"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Código Postal *
+              </label>
+              <input
+                type="text"
+                formControlName="codigo_postal"
+                class="input-field"
+                placeholder="81200"
+                maxlength="10"
+              />
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Notas -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Notas Adicionales</h2>
+        <textarea
+          formControlName="notas"
+          class="input-field"
+          rows="4"
+          placeholder="Información adicional..."
+        ></textarea>
+      </div>
+
+      <!-- Botones -->
+      <div class="flex justify-end space-x-4">
+        <button
+          type="button"
+          (click)="cancelar()"
+          class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="form.invalid || isSubmitting"
+          class="btn-primary"
+        >
+          {{ isSubmitting ? 'Registrando...' : 'Registrar ' + (tipoRegistro === 'empresa' ? 'Empresa' : 'Panadería') }}
+        </button>
+      </div>
+
+      <!-- Mensaje de éxito/error -->
+      @if (mensaje) {
+        <div
+          class="mt-4 p-4 rounded-lg"
+          [ngClass]="{
+            'bg-green-50 text-green-800': !mensajeError,
+            'bg-red-50 text-red-800': mensajeError
+          }"
+        >
+          {{ mensaje }}
+        </div>
+      }
+    </form>
+  </div>
+</div>
