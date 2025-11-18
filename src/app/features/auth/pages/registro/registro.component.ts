@@ -33,7 +33,7 @@ export class RegistroComponent {
   successMessage: string = '';
   isLoading: boolean = false;
 
-  private apiUrl = 'http://localhost:8000/auth'; // Ajusta según tu backend
+  private apiUrl = 'http://localhost:8000/api/auth'; // Ajusta según tu backend
 
   constructor(
     private http: HttpClient,
