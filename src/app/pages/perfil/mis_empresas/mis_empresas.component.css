@@ -1,32 +1,399 @@
-.container-custom {
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+/* src/app/pages/perfil/mis_empresas/mis-empresas.component.css */
+
+/* FONDO GENERAL */
+.mis-empresas-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f5f5f0 0%, #ffffff 100%);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-/* Botón principal reutilizable */
-.btn-primary {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
-  background-color: #22c55e;
-  color: #ffffff;
+/* HEADER */
+.empresas-header {
+  background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+}
+
+.empresas-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.empresas-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.empresas-logo img {
+  height: 48px;
+  width: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.empresas-header-text h1 {
+  margin: 0;
+  font-size: 1.7rem;
+  color: #fff;
   font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.empresas-header-text p {
+  margin: 2px 0 0;
+  font-size: 0.9rem;
+  color: #f8eadd;
+}
+
+/* BOTÓN DE VOLVER */
+.empresas-btn-back {
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: 2px solid #f5e0c3;
+  background: transparent;
+  color: #fff7e9;
+  font-weight: 600;
+  font-size: 0.9rem;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.btn-primary:hover:not(:disabled) {
-  background-color: #16a34a;
+.empresas-btn-back:hover {
+  background: rgba(245, 224, 195, 0.15);
   transform: translateY(-1px);
 }
 
-.btn-primary:disabled {
-  opacity: 0.6;
+/* CONTENIDO PRINCIPAL */
+.empresas-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
+
+/* CARD CENTRADA (loading o error) */
+.empresas-center-card {
+  max-width: 480px;
+  margin: 60px auto 0;
+  padding: 24px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.empresas-center-card p {
+  margin-top: 10px;
+  color: #5a4631;
+}
+
+.empresas-error {
+  border-left: 4px solid #e74c3c;
+}
+
+/* SPINNER */
+.empresas-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid #f3e5d8;
+  border-top-color: #8b4513;
+  margin: 0 auto;
+  animation: empresas-spin 0.9s linear infinite;
+}
+
+@keyframes empresas-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* TABS */
+.empresas-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.empresas-tab {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.empresas-tab:hover {
+  background: #f9fafb;
+  color: #374151;
+}
+
+.empresas-tab.active {
+  background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+}
+
+/* CONTENIDO */
+.empresas-content {
+  min-height: 400px;
+}
+
+/* ESTADO VACÍO */
+.empresas-empty {
+  max-width: 500px;
+  margin: 80px auto;
+  padding: 40px 24px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.empresas-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+
+.empresas-empty h3 {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+  color: #3b1e05;
+}
+
+.empresas-empty p {
+  margin: 0 0 24px;
+  color: #6b4a28;
+  font-size: 1rem;
+}
+
+/* GRID DE TARJETAS */
+.empresas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* TARJETA */
+.empresas-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(148, 119, 80, 0.12);
+  transition: all 0.2s ease;
+}
+
+.empresas-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* HEADER DE LA TARJETA */
+.empresas-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.empresas-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fef3c7, #fcd34d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 12px rgba(252, 211, 77, 0.4);
+}
+
+/* BADGES */
+.empresas-badge {
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-activo {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-inactivo {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* TÍTULO */
+.empresas-card-title {
+  margin: 0 0 8px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #3b1e05;
+  line-height: 1.3;
+}
+
+/* DESCRIPCIÓN */
+.empresas-card-desc {
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  color: #6b4a28;
+  line-height: 1.5;
+}
+
+/* INFO */
+.empresas-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.empresas-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.empresas-info-row:last-child {
+  border-bottom: none;
+}
+
+.empresas-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.empresas-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+  text-align: right;
+}
+
+/* FOOTER DE LA TARJETA */
+.empresas-card-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* BOTONES */
+.empresas-btn-primary,
+.empresas-btn-secondary {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.15s ease;
+  display: inline-block;
+}
+
+.empresas-btn-primary {
+  background: linear-gradient(135deg, #654321 0%, #8b4513 100%);
+  color: #fff7ec;
+  box-shadow: 0 6px 16px rgba(101, 67, 33, 0.45);
+}
+
+.empresas-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(101, 67, 33, 0.6);
+}
+
+.empresas-btn-secondary {
+  background: #fefaf5;
+  color: #5a3414;
+  border: 1px solid #e4d2bd;
+}
+
+.empresas-btn-secondary:hover:not(:disabled) {
+  background: #f7e3c8;
+}
+
+.empresas-btn-secondary:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* BOTÓN FLOTANTE (FAB) */
+.empresas-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #654321 0%, #8b4513 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 300;
+  box-shadow: 0 8px 24px rgba(101, 67, 33, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  z-index: 999;
+}
+
+.empresas-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 32px rgba(101, 67, 33, 0.8);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .empresas-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .empresas-tabs {
+    flex-direction: column;
+  }
+
+  .empresas-tab {
+    width: 100%;
+    text-align: left;
+  }
+
+  .empresas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .empresas-fab {
+    width: 56px;
+    height: 56px;
+    font-size: 1.75rem;
+  }
 }

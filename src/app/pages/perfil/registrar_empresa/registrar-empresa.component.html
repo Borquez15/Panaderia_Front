@@ -1,103 +1,110 @@
-<div class="min-h-screen bg-gray-50 py-8">
-  <div class="container-custom max-w-4xl">
-    <!-- Header -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">
-        Registrar {{ tipoRegistro === 'empresa' ? 'Empresa' : 'Panadería' }}
-      </h1>
-      <p class="text-gray-600">
-        Completa el formulario para registrar tu {{ tipoRegistro }}
-      </p>
-    </div>
+<!-- src/app/pages/perfil/registrar_empresa/registrar-empresa.component.html -->
+<div class="registrar-page">
+  <!-- HEADER -->
+  <header class="registrar-header">
+    <div class="registrar-header-inner">
+      <div class="registrar-logo">
+        <img src="assets/img/logo_pan.png" alt="Logo Panadería El Dan" />
+        <div class="registrar-header-text">
+          <h1>Registrar Negocio</h1>
+          <p>Crea tu empresa o panadería</p>
+        </div>
+      </div>
 
-    <!-- Selector de tipo -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-      <h2 class="text-xl font-bold text-gray-900 mb-4">Tipo de registro</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <button
-          type="button"
-          (click)="cambiarTipo('empresa')"
-          class="p-4 rounded-lg border-2 transition-all"
-          [ngClass]="{
-            'border-primary-500 bg-primary-50': tipoRegistro === 'empresa',
-            'border-gray-300 hover:border-primary-300': tipoRegistro !== 'empresa'
-          }"
-        >
-          <div class="text-4xl mb-2">🏢</div>
-          <div class="font-semibold">Empresa / Negocio</div>
-          <div class="text-sm text-gray-600">Cafetería, restaurante, hotel, etc.</div>
+      <a routerLink="/perfil" class="registrar-btn-back">
+        ← Volver
+      </a>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="registrar-main">
+    <!-- SELECTOR DE TIPO -->
+    <section class="registrar-tipo-selector">
+      <h2>¿Qué deseas registrar?</h2>
+      
+      <div class="tipo-cards">
+        <button 
+          class="tipo-card"
+          [class.active]="tipoSeleccionado === 'empresa'"
+          (click)="tipoSeleccionado = 'empresa'">
+          <div class="tipo-icon">🏢</div>
+          <h3>Empresa / Negocio</h3>
+          <p>Para hacer pedidos de pan y productos</p>
         </button>
 
-        <button
-          type="button"
-          (click)="cambiarTipo('panaderia')"
-          class="p-4 rounded-lg border-2 transition-all"
-          [ngClass]="{
-            'border-primary-500 bg-primary-50': tipoRegistro === 'panaderia',
-            'border-gray-300 hover:border-primary-300': tipoRegistro !== 'panaderia'
-          }"
-        >
-          <div class="text-4xl mb-2">🥖</div>
-          <div class="font-semibold">Panadería</div>
-          <div class="text-sm text-gray-600">Vendo productos de panadería</div>
+        <button 
+          class="tipo-card"
+          [class.active]="tipoSeleccionado === 'panaderia'"
+          (click)="tipoSeleccionado = 'panaderia'">
+          <div class="tipo-icon">🥖</div>
+          <h3>Panadería</h3>
+          <p>Para vender tus productos</p>
         </button>
       </div>
-    </div>
+    </section>
 
-    <!-- Formulario -->
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      @if (tipoRegistro === 'empresa') {
-        <!-- FORMULARIO EMPRESA -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Información General</h2>
+    <!-- FORMULARIO DE EMPRESA -->
+    <section *ngIf="tipoSeleccionado === 'empresa'" class="registrar-formulario">
+      <div class="form-header">
+        <h2>📋 Datos de la Empresa</h2>
+        <p>Completa la información de tu negocio</p>
+      </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Nombre Comercial *
-              </label>
-              <input
-                type="text"
-                formControlName="nombre_comercial"
-                class="input-field"
+      <form class="registrar-form" (ngSubmit)="registrarEmpresa()" #empresaForm="ngForm">
+        <!-- Información Básica -->
+        <div class="form-section">
+          <h3>Información Básica</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre_comercial">Nombre Comercial *</label>
+              <input 
+                type="text" 
+                id="nombre_comercial"
+                name="nombre_comercial"
+                [(ngModel)]="formEmpresa.nombre_comercial"
+                required
                 placeholder="Ej: Café Central"
-              />
-              @if (form.get('nombre_comercial')?.invalid && form.get('nombre_comercial')?.touched) {
-                <p class="text-red-500 text-sm mt-1">Campo requerido</p>
-              }
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Razón Social *
-              </label>
-              <input
-                type="text"
-                formControlName="razon_social"
-                class="input-field"
-                placeholder="Café Central SA de CV"
-              />
+            <div class="form-group">
+              <label for="razon_social">Razón Social *</label>
+              <input 
+                type="text" 
+                id="razon_social"
+                name="razon_social"
+                [(ngModel)]="formEmpresa.razon_social"
+                required
+                placeholder="Ej: Café Central SA de CV"
+                class="form-input">
             </div>
+          </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                RFC *
-              </label>
-              <input
-                type="text"
-                formControlName="rfc"
-                class="input-field"
-                placeholder="CAC20010101ABC"
+          <div class="form-row">
+            <div class="form-group">
+              <label for="rfc">RFC *</label>
+              <input 
+                type="text" 
+                id="rfc"
+                name="rfc"
+                [(ngModel)]="formEmpresa.rfc"
+                required
                 maxlength="13"
-              />
+                placeholder="Ej: CAC20010101ABC"
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Tipo de Empresa *
-              </label>
-              <select formControlName="tipo_empresa" class="input-field">
-                <option value="">Seleccionar...</option>
+            <div class="form-group">
+              <label for="tipo_empresa">Tipo de Empresa *</label>
+              <select 
+                id="tipo_empresa"
+                name="tipo_empresa"
+                [(ngModel)]="formEmpresa.tipo_empresa"
+                required
+                class="form-input">
+                <option value="">Selecciona...</option>
                 <option value="cafeteria">Cafetería</option>
                 <option value="restaurante">Restaurante</option>
                 <option value="hotel">Hotel</option>
@@ -107,338 +114,366 @@
                 <option value="otro">Otro</option>
               </select>
             </div>
+          </div>
+        </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Email de Facturación *
-              </label>
-              <input
-                type="email"
-                formControlName="email_facturacion"
-                class="input-field"
+        <!-- Contacto -->
+        <div class="form-section">
+          <h3>Contacto</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email_facturacion">Email de Facturación *</label>
+              <input 
+                type="email" 
+                id="email_facturacion"
+                name="email_facturacion"
+                [(ngModel)]="formEmpresa.email_facturacion"
+                required
                 placeholder="facturacion@empresa.com"
-              />
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Teléfono *
-              </label>
-              <input
-                type="tel"
-                formControlName="telefono"
-                class="input-field"
+            <div class="form-group">
+              <label for="telefono">Teléfono *</label>
+              <input 
+                type="tel" 
+                id="telefono"
+                name="telefono"
+                [(ngModel)]="formEmpresa.telefono"
+                required
                 placeholder="6681234567"
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Teléfono Alternativo
-              </label>
-              <input
-                type="tel"
-                formControlName="telefono_alternativo"
-                class="input-field"
-                placeholder="6681234568"
-              />
+                class="form-input">
             </div>
           </div>
         </div>
 
         <!-- Dirección Fiscal -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Dirección Fiscal</h2>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Calle *
-              </label>
-              <input
-                type="text"
-                formControlName="calle_fiscal"
-                class="input-field"
-                placeholder="Av. Revolución"
-              />
+        <div class="form-section">
+          <h3>Dirección Fiscal</h3>
+          
+          <div class="form-row">
+            <div class="form-group form-group-wide">
+              <label for="calle_fiscal">Calle *</label>
+              <input 
+                type="text" 
+                id="calle_fiscal"
+                name="calle_fiscal"
+                [(ngModel)]="formEmpresa.calle_fiscal"
+                required
+                placeholder="Ej: Av. Revolución"
+                class="form-input">
             </div>
+          </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Número Exterior *
-              </label>
-              <input
-                type="text"
-                formControlName="numero_exterior_fiscal"
-                class="input-field"
+          <div class="form-row">
+            <div class="form-group">
+              <label for="numero_exterior_fiscal">Número Exterior *</label>
+              <input 
+                type="text" 
+                id="numero_exterior_fiscal"
+                name="numero_exterior_fiscal"
+                [(ngModel)]="formEmpresa.numero_exterior_fiscal"
+                required
                 placeholder="123"
-              />
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Número Interior
-              </label>
-              <input
-                type="text"
-                formControlName="numero_interior_fiscal"
-                class="input-field"
+            <div class="form-group">
+              <label for="numero_interior_fiscal">Número Interior</label>
+              <input 
+                type="text" 
+                id="numero_interior_fiscal"
+                name="numero_interior_fiscal"
+                [(ngModel)]="formEmpresa.numero_interior_fiscal"
                 placeholder="A"
-              />
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Colonia *
-              </label>
-              <input
-                type="text"
-                formControlName="colonia_fiscal"
-                class="input-field"
+            <div class="form-group">
+              <label for="colonia_fiscal">Colonia *</label>
+              <input 
+                type="text" 
+                id="colonia_fiscal"
+                name="colonia_fiscal"
+                [(ngModel)]="formEmpresa.colonia_fiscal"
+                required
                 placeholder="Centro"
-              />
+                class="form-input">
             </div>
+          </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Ciudad *
-              </label>
-              <input
-                type="text"
-                formControlName="ciudad_fiscal"
-                class="input-field"
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ciudad_fiscal">Ciudad *</label>
+              <input 
+                type="text" 
+                id="ciudad_fiscal"
+                name="ciudad_fiscal"
+                [(ngModel)]="formEmpresa.ciudad_fiscal"
+                required
                 placeholder="Los Mochis"
-              />
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Estado *
-              </label>
-              <input
-                type="text"
-                formControlName="estado_fiscal"
-                class="input-field"
+            <div class="form-group">
+              <label for="estado_fiscal">Estado *</label>
+              <input 
+                type="text" 
+                id="estado_fiscal"
+                name="estado_fiscal"
+                [(ngModel)]="formEmpresa.estado_fiscal"
+                required
                 placeholder="Sinaloa"
-              />
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Código Postal *
-              </label>
-              <input
-                type="text"
-                formControlName="codigo_postal_fiscal"
-                class="input-field"
+            <div class="form-group">
+              <label for="codigo_postal_fiscal">Código Postal *</label>
+              <input 
+                type="text" 
+                id="codigo_postal_fiscal"
+                name="codigo_postal_fiscal"
+                [(ngModel)]="formEmpresa.codigo_postal_fiscal"
+                required
+                maxlength="5"
                 placeholder="81200"
-                maxlength="10"
-              />
+                class="form-input">
             </div>
           </div>
         </div>
-      } @else {
-        <!-- FORMULARIO PANADERÍA -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Información de la Panadería</h2>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Nombre de la Panadería *
-              </label>
-              <input
-                type="text"
-                formControlName="nombre"
-                class="input-field"
-                placeholder="Panadería El Dan"
-              />
+        <!-- Botones -->
+        <div class="form-actions">
+          <button 
+            type="button" 
+            class="registrar-btn-secondary"
+            (click)="limpiarFormulario()">
+            Limpiar
+          </button>
+          <button 
+            type="submit" 
+            class="registrar-btn-primary"
+            [disabled]="isSubmitting || !empresaForm.valid">
+            {{ isSubmitting ? 'Registrando...' : 'Registrar Empresa' }}
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- FORMULARIO DE PANADERÍA -->
+    <section *ngIf="tipoSeleccionado === 'panaderia'" class="registrar-formulario">
+      <div class="form-header">
+        <h2>🥖 Datos de la Panadería</h2>
+        <p>Completa la información de tu panadería</p>
+      </div>
+
+      <form class="registrar-form" (ngSubmit)="registrarPanaderia()" #panaderiaForm="ngForm">
+        <!-- Información Básica -->
+        <div class="form-section">
+          <h3>Información Básica</h3>
+          
+          <div class="form-row">
+            <div class="form-group form-group-wide">
+              <label for="nombre">Nombre de la Panadería *</label>
+              <input 
+                type="text" 
+                id="nombre"
+                name="nombre"
+                [(ngModel)]="formPanaderia.nombre"
+                required
+                placeholder="Ej: Panadería El Dan"
+                class="form-input">
             </div>
+          </div>
 
-            <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Descripción
-              </label>
-              <textarea
-                formControlName="descripcion"
-                class="input-field"
+          <div class="form-row">
+            <div class="form-group form-group-wide">
+              <label for="descripcion">Descripción</label>
+              <textarea 
+                id="descripcion"
+                name="descripcion"
+                [(ngModel)]="formPanaderia.descripcion"
                 rows="3"
                 placeholder="Describe tu panadería..."
-              ></textarea>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Email *
-              </label>
-              <input
-                type="email"
-                formControlName="email"
-                class="input-field"
-                placeholder="contacto@panaderia.com"
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Teléfono *
-              </label>
-              <input
-                type="tel"
-                formControlName="telefono"
-                class="input-field"
-                placeholder="6681234567"
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                WhatsApp
-              </label>
-              <input
-                type="tel"
-                formControlName="whatsapp"
-                class="input-field"
-                placeholder="6681234567"
-              />
+                class="form-input"></textarea>
             </div>
           </div>
         </div>
 
-        <!-- Dirección Panadería -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Dirección</h2>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Calle *
-              </label>
-              <input
-                type="text"
-                formControlName="calle"
-                class="input-field"
-                placeholder="Av. Revolución"
-              />
+        <!-- Contacto -->
+        <div class="form-section">
+          <h3>Contacto</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input 
+                type="email" 
+                id="email"
+                name="email"
+                [(ngModel)]="formPanaderia.email"
+                required
+                placeholder="ventas@panaderia.com"
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Número Exterior *
-              </label>
-              <input
-                type="text"
-                formControlName="numero_exterior"
-                class="input-field"
-                placeholder="123"
-              />
+            <div class="form-group">
+              <label for="telefono_pan">Teléfono *</label>
+              <input 
+                type="tel" 
+                id="telefono_pan"
+                name="telefono"
+                [(ngModel)]="formPanaderia.telefono"
+                required
+                placeholder="6681234567"
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Número Interior
-              </label>
-              <input
-                type="text"
-                formControlName="numero_interior"
-                class="input-field"
-                placeholder="A"
-              />
+            <div class="form-group">
+              <label for="whatsapp">WhatsApp</label>
+              <input 
+                type="tel" 
+                id="whatsapp"
+                name="whatsapp"
+                [(ngModel)]="formPanaderia.whatsapp"
+                placeholder="6681234567"
+                class="form-input">
+            </div>
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="form-section">
+          <h3>Ubicación</h3>
+          
+          <div class="form-row">
+            <div class="form-group form-group-wide">
+              <label for="calle">Calle *</label>
+              <input 
+                type="text" 
+                id="calle"
+                name="calle"
+                [(ngModel)]="formPanaderia.calle"
+                required
+                placeholder="Av. Principal"
+                class="form-input">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="numero_exterior">Número Exterior *</label>
+              <input 
+                type="text" 
+                id="numero_exterior"
+                name="numero_exterior"
+                [(ngModel)]="formPanaderia.numero_exterior"
+                required
+                placeholder="456"
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Colonia *
-              </label>
-              <input
-                type="text"
-                formControlName="colonia"
-                class="input-field"
+            <div class="form-group">
+              <label for="numero_interior">Número Interior</label>
+              <input 
+                type="text" 
+                id="numero_interior"
+                name="numero_interior"
+                [(ngModel)]="formPanaderia.numero_interior"
+                placeholder="B"
+                class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label for="colonia">Colonia *</label>
+              <input 
+                type="text" 
+                id="colonia"
+                name="colonia"
+                [(ngModel)]="formPanaderia.colonia"
+                required
                 placeholder="Centro"
-              />
+                class="form-input">
             </div>
+          </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Ciudad *
-              </label>
-              <input
-                type="text"
-                formControlName="ciudad"
-                class="input-field"
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ciudad">Ciudad *</label>
+              <input 
+                type="text" 
+                id="ciudad"
+                name="ciudad"
+                [(ngModel)]="formPanaderia.ciudad"
+                required
                 placeholder="Los Mochis"
-              />
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Estado *
-              </label>
-              <input
-                type="text"
-                formControlName="estado"
-                class="input-field"
+            <div class="form-group">
+              <label for="estado">Estado *</label>
+              <input 
+                type="text" 
+                id="estado"
+                name="estado"
+                [(ngModel)]="formPanaderia.estado"
+                required
                 placeholder="Sinaloa"
-              />
+                class="form-input">
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Código Postal *
-              </label>
-              <input
-                type="text"
-                formControlName="codigo_postal"
-                class="input-field"
+            <div class="form-group">
+              <label for="codigo_postal">Código Postal *</label>
+              <input 
+                type="text" 
+                id="codigo_postal"
+                name="codigo_postal"
+                [(ngModel)]="formPanaderia.codigo_postal"
+                required
+                maxlength="5"
                 placeholder="81200"
-                maxlength="10"
-              />
+                class="form-input">
             </div>
           </div>
         </div>
-      }
 
-      <!-- Notas -->
-      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">Notas Adicionales</h2>
-        <textarea
-          formControlName="notas"
-          class="input-field"
-          rows="4"
-          placeholder="Información adicional..."
-        ></textarea>
-      </div>
-
-      <!-- Botones -->
-      <div class="flex justify-end space-x-4">
-        <button
-          type="button"
-          (click)="cancelar()"
-          class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-        >
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          [disabled]="form.invalid || isSubmitting"
-          class="btn-primary"
-        >
-          {{ isSubmitting ? 'Registrando...' : 'Registrar ' + (tipoRegistro === 'empresa' ? 'Empresa' : 'Panadería') }}
-        </button>
-      </div>
-
-      <!-- Mensaje de éxito/error -->
-      @if (mensaje) {
-        <div
-          class="mt-4 p-4 rounded-lg"
-          [ngClass]="{
-            'bg-green-50 text-green-800': !mensajeError,
-            'bg-red-50 text-red-800': mensajeError
-          }"
-        >
-          {{ mensaje }}
+        <!-- Botones -->
+        <div class="form-actions">
+          <button 
+            type="button" 
+            class="registrar-btn-secondary"
+            (click)="limpiarFormulario()">
+            Limpiar
+          </button>
+          <button 
+            type="submit" 
+            class="registrar-btn-primary"
+            [disabled]="isSubmitting || !panaderiaForm.valid">
+            {{ isSubmitting ? 'Registrando...' : 'Registrar Panadería' }}
+          </button>
         </div>
-      }
-    </form>
-  </div>
+      </form>
+    </section>
+
+    <!-- MENSAJE DE ÉXITO -->
+    <div *ngIf="mensajeExito" class="mensaje-exito">
+      <div class="mensaje-icon">✅</div>
+      <h3>¡Registro exitoso!</h3>
+      <p>{{ mensajeExito }}</p>
+      <a routerLink="/perfil/mis-empresas" class="registrar-btn-primary">
+        Ver mis negocios
+      </a>
+    </div>
+
+    <!-- MENSAJE DE ERROR -->
+    <div *ngIf="mensajeError" class="mensaje-error">
+      <div class="mensaje-icon">❌</div>
+      <h3>Error en el registro</h3>
+      <p>{{ mensajeError }}</p>
+      <button (click)="mensajeError = ''" class="registrar-btn-secondary">
+        Cerrar
+      </button>
+    </div>
+  </main>
 </div>

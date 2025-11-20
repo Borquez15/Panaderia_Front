@@ -1,35 +1,8 @@
+// src/app/pages/perfil/mis_empresas/mis-empresas.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-
-interface Empresa {
-  id: number;
-  nombre_comercial: string;
-  razon_social: string;
-  rfc: string;
-  tipo_empresa: string;
-  email_facturacion: string;
-  telefono: string;
-  ciudad_fiscal: string;
-  estado_fiscal: string;
-  is_active: boolean;
-  is_verified: boolean;
-}
-
-interface Panaderia {
-  id: number;
-  nombre: string;
-  descripcion?: string;
-  logo_url?: string;
-  email: string;
-  telefono: string;
-  ciudad: string;
-  estado: string;
-  is_active: boolean;
-  acepta_pedidos: boolean;
-}
+import { RouterLink } from '@angular/router';
+import { EmpresaService, Empresa, Panaderia } from '../../../services/empresa.service';
 
 @Component({
   selector: 'app-mis-empresas',
@@ -39,57 +12,47 @@ interface Panaderia {
   styleUrls: ['./mis_empresas.component.css']
 })
 export class MisEmpresasComponent implements OnInit {
-  tabActiva: 'empresas' | 'panaderias' = 'empresas';
   empresas: Empresa[] = [];
   panaderias: Panaderia[] = [];
   isLoading = false;
+  error = '';
+  tabActiva: 'empresas' | 'panaderias' = 'empresas';
 
-  private apiUrl = environment.apiUrl;
-
-  constructor(
-    private http: HttpClient,
-    private router: Router
-  ) {}
+  constructor(private empresaService: EmpresaService) {}
 
   ngOnInit(): void {
-    this.cargarEmpresas();
-    this.cargarPanaderias();
+    this.cargarDatos();
   }
 
-  cargarEmpresas(): void {
+  cargarDatos(): void {
     this.isLoading = true;
-    this.http.get<any>(`${this.apiUrl}/api/mis-empresas/empresas`).subscribe({
-      next: (response) => {
-        this.empresas = response.empresas || [];
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error al cargar empresas:', error);
-        this.isLoading = false;
+    this.error = '';
+
+    // Cargar empresas y panaderías en paralelo
+    Promise.all([
+      this.empresaService.getMisEmpresas().toPromise(),
+      this.empresaService.getMisPanaderias().toPromise()
+    ])
+    .then(([empresas, panaderias]) => {
+      this.empresas = empresas || [];
+      this.panaderias = panaderias || [];
+      this.isLoading = false;
+
+      console.log('✅ Datos cargados:');
+      console.log('  - Empresas:', this.empresas.length);
+      console.log('  - Panaderías:', this.panaderias.length);
+    })
+    .catch((err) => {
+      console.error('❌ Error al cargar datos:', err);
+      this.isLoading = false;
+      
+      if (err.status === 401) {
+        this.error = 'Sesión expirada. Por favor inicia sesión nuevamente.';
+      } else if (err.status === 403) {
+        this.error = 'No tienes permisos para ver esta información.';
+      } else {
+        this.error = 'No se pudieron cargar tus negocios. Intenta de nuevo.';
       }
     });
-  }
-
-  cargarPanaderias(): void {
-    this.http.get<any>(`${this.apiUrl}/api/mis-empresas/panaderias`).subscribe({
-      next: (response) => {
-        this.panaderias = response.panaderias || [];
-      },
-      error: (error) => {
-        console.error('Error al cargar panaderías:', error);
-      }
-    });
-  }
-
-  verDetalles(empresaId: number): void {
-    this.router.navigate(['/perfil/empresa', empresaId]);
-  }
-
-  verDetallesPanaderia(panaderiaId: number): void {
-    this.router.navigate(['/perfil/panaderia', panaderiaId]);
-  }
-
-  gestionarProductos(panaderiaId: number): void {
-    this.router.navigate(['/perfil/panaderia', panaderiaId, 'productos']);
   }
 }

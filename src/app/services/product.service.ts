@@ -1,21 +1,23 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+// src/app/services/product.service.ts
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '../environments/environment';
 
 export interface Product {
   id: number;
   nombre: string;
-  descripcion: string;
+  descripcion?: string;
   precio: number;
-  precio_oferta?: number;
-  stock: number;
-  imagen_url?: string;
+  precio_descuento?: number;
+  categoria?: string;
   categoria_id?: number;
-  categoria?: Category;
+  stock: number;
+  unidad: string;
+  imagen_url?: string;
   is_active: boolean;
-  is_destacado: boolean;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface Category {
@@ -23,20 +25,17 @@ export interface Category {
   nombre: string;
   descripcion?: string;
   imagen_url?: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
+  orden?: number;
 }
 
 export interface ProductFilters {
-  query?: string;
   categoria_id?: number;
-  precio_min?: number;
-  precio_max?: number;
-  destacados?: boolean;
-  activos?: boolean;
-  skip?: number;
+  query?: string;
   limit?: number;
+  offset?: number;
+  min_precio?: number;
+  max_precio?: number;
+  in_stock?: boolean;
 }
 
 @Injectable({
@@ -44,119 +43,146 @@ export interface ProductFilters {
 })
 export class ProductService {
   private http = inject(HttpClient);
-  
-  products = signal<Product[]>([]);
-  categories = signal<Category[]>([]);
-  loading = signal(false);
+  private apiUrl = environment.apiUrl;
 
-  async getProducts(filters: ProductFilters = {}): Promise<Product[]> {
-    this.loading.set(true);
+  /**
+   * Obtener lista de productos
+   */
+  async getProducts(filters?: ProductFilters): Promise<Product[]> {
     try {
-      let params = new HttpParams();
+      console.log('📦 Obteniendo productos...', filters);
       
-      if (filters.query) params = params.set('query', filters.query);
-      if (filters.categoria_id) params = params.set('categoria_id', filters.categoria_id.toString());
-      if (filters.precio_min !== undefined) params = params.set('precio_min', filters.precio_min.toString());
-      if (filters.precio_max !== undefined) params = params.set('precio_max', filters.precio_max.toString());
-      if (filters.destacados !== undefined) params = params.set('destacados', filters.destacados.toString());
-      if (filters.activos !== undefined) params = params.set('activos', filters.activos.toString());
-      if (filters.skip !== undefined) params = params.set('skip', filters.skip.toString());
-      if (filters.limit !== undefined) params = params.set('limit', filters.limit.toString());
+      // Construir query params
+      let params: any = {
+        limit: filters?.limit || 50,
+        offset: filters?.offset || 0
+      };
 
-      const products = await this.http.get<Product[]>(
-        `${environment.apiUrl}/products`,
-        { params }
-      ).toPromise();
-
-      if (products) {
-        this.products.set(products);
-        return products;
+      if (filters?.categoria_id) {
+        params.category = filters.categoria_id;
       }
-      return [];
-    } catch (error) {
-      console.error('Error loading products:', error);
-      return [];
-    } finally {
-      this.loading.set(false);
-    }
-  }
 
-  async getFeaturedProducts(limit: number = 10): Promise<Product[]> {
-    try {
-      const products = await this.http.get<Product[]>(
-        `${environment.apiUrl}/products/featured`,
-        { params: { limit: limit.toString() } }
-      ).toPromise();
-      
-      return products || [];
+      if (filters?.query) {
+        params.search = filters.query;
+      }
+
+      const response = await firstValueFrom(
+        this.http.get<Product[]>(`${this.apiUrl}/products`, { params })
+      );
+
+      console.log('✅ Productos obtenidos:', response.length);
+      return response;
+
     } catch (error) {
-      console.error('Error loading featured products:', error);
+      console.error('❌ Error obteniendo productos:', error);
       return [];
     }
   }
 
-  async getProductById(id: number): Promise<Product | null> {
+  /**
+   * Obtener categorías
+   */
+  async getCategories(): Promise<string[]> {
     try {
-      const product = await this.http.get<Product>(
-        `${environment.apiUrl}/products/${id}`
-      ).toPromise();
+      console.log('📂 Obteniendo categorías...');
       
-      return product || null;
+      const response = await firstValueFrom(
+        this.http.get<string[]>(`${this.apiUrl}/categories`)
+      );
+
+      console.log('✅ Categorías obtenidas:', response);
+      
+      // Convertir strings a objetos Category
+      return response.map((cat, index) => ({
+        id: index + 1,
+        nombre: cat,
+        imagen_url: this.getCategoryImage(cat)
+      })) as any;
+
     } catch (error) {
-      console.error('Error loading product:', error);
+      console.error('❌ Error obteniendo categorías:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Obtener producto por ID
+   */
+  async getProduct(id: number): Promise<Product | null> {
+    try {
+      console.log('🔍 Obteniendo producto:', id);
+      
+      const response = await firstValueFrom(
+        this.http.get<Product>(`${this.apiUrl}/products/${id}`)
+      );
+
+      console.log('✅ Producto obtenido:', response);
+      return response;
+
+    } catch (error) {
+      console.error('❌ Error obteniendo producto:', error);
       return null;
     }
   }
 
-  async getCategories(): Promise<Category[]> {
+  /**
+   * Buscar productos
+   */
+  async searchProducts(query: string): Promise<Product[]> {
     try {
-      const categories = await this.http.get<Category[]>(
-        `${environment.apiUrl}/categories`
-      ).toPromise();
+      const response = await firstValueFrom(
+        this.http.get<Product[]>(`${this.apiUrl}/products/search`, {
+          params: { q: query }
+        })
+      );
 
-      if (categories) {
-        this.categories.set(categories);
-        return categories;
-      }
-      return [];
+      return response;
+
     } catch (error) {
-      console.error('Error loading categories:', error);
+      console.error('❌ Error buscando productos:', error);
       return [];
     }
   }
 
-  async getCategoryById(id: number): Promise<Category | null> {
-    try {
-      const category = await this.http.get<Category>(
-        `${environment.apiUrl}/categories/${id}`
-      ).toPromise();
-      
-      return category || null;
-    } catch (error) {
-      console.error('Error loading category:', error);
-      return null;
-    }
-  }
-
-  getPrecioFinal(product: Product): number {
-    return product.precio_oferta || product.precio;
-  }
-
+  /**
+   * Verificar si un producto tiene descuento
+   */
   tieneDescuento(product: Product): boolean {
-    return !!product.precio_oferta && product.precio_oferta < product.precio;
+    return !!(product.precio_descuento && product.precio_descuento < product.precio);
   }
 
+  /**
+   * Obtener precio final (con descuento si aplica)
+   */
+  getPrecioFinal(product: Product): number {
+    if (this.tieneDescuento(product)) {
+      return product.precio_descuento!;
+    }
+    return product.precio;
+  }
+
+  /**
+   * Calcular porcentaje de descuento
+   */
   calcularDescuento(product: Product): number {
     if (!this.tieneDescuento(product)) return 0;
-    const descuento = ((product.precio - product.precio_oferta!) / product.precio) * 100;
+    
+    const descuento = ((product.precio - product.precio_descuento!) / product.precio) * 100;
     return Math.round(descuento);
   }
 
-  getProductsCount(): number {
-    return this.products().length;
-  }
+  /**
+   * Obtener imagen de categoría
+   */
+  private getCategoryImage(categoria: string): string {
+    const images: { [key: string]: string } = {
+      'Pan Dulce': '/assets/images/categories/pan-dulce.jpg',
+      'Pan Salado': '/assets/images/categories/pan-salado.jpg',
+      'Pastelería': '/assets/images/categories/pasteleria.jpg',
+      'Galletas': '/assets/images/categories/galletas.jpg',
+      'Especiales': '/assets/images/categories/especiales.jpg'
+    };
 
-  clearProducts(): void {
-    this.products.set([]);
+    return images[categoria] || '/assets/images/categories/default.jpg';
   }
 }

@@ -1,9 +1,10 @@
+<!-- src/app/features/productos/pages/lista-productos/lista-productos.component.html -->
 <div class="productos-container">
   <!-- Header con logo -->
   <header class="productos-header">
     <div class="header-content">
       <div class="logo-section">
-        <img src="assets/img/logo_pan.png" alt="Logo" class="logo" >
+        <img src="assets/img/logo_pan.png" alt="Logo" class="logo">
         <h1 class="title">Panadería el Dan</h1>
       </div>
       <button class="menu-btn" aria-label="Menú" (click)="toggleSidebar()">
@@ -49,22 +50,23 @@
     <!-- Sidebar de categorías -->
     <aside class="categories-sidebar">
       <nav class="categories-nav">
+        <!-- Botón "Todas" -->
         <button 
           class="category-btn"
           [class.active]="selectedCategory() === null"
           (click)="selectCategory(null)">
-          <img src="/assets/images/categories/todas.jpg" alt="Todas">
+          <img src="assets/img/todas.jpg" alt="Todas">
           <span>Todas</span>
         </button>
 
-        @for (category of categories(); track category.id) {
+        <!-- Categorías dinámicas -->
+        @for (category of categories(); track category) {
           <button 
             class="category-btn"
-            [class.active]="selectedCategory() === category.id"
-            (click)="selectCategory(category.id)">
-            <img [src]="category.imagen_url || '/assets/images/placeholder.png'" 
-                 [alt]="category.nombre">
-            <span>{{ category.nombre }}</span>
+            [class.active]="selectedCategory() === category"
+            (click)="selectCategory(category)">
+            <img [src]="getCategoryImage(category)" [alt]="category">
+            <span>{{ category }}</span>
           </button>
         }
       </nav>
@@ -88,12 +90,12 @@
         </div>
         
         <div class="filter-buttons">
-          <button class="filter-btn">
+          <button class="filter-btn" title="Ordenar">
             <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
               <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3z"/>
             </svg>
           </button>
-          <button class="filter-btn">
+          <button class="filter-btn" title="Filtros">
             <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
               <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4z"/>
             </svg>
@@ -101,12 +103,16 @@
         </div>
       </div>
 
+      <!-- Estado de carga -->
       @if (loading()) {
         <div class="loading-container">
           <div class="spinner"></div>
           <p>Cargando productos...</p>
         </div>
-      } @else if (products().length === 0) {
+      } 
+      
+      <!-- Estado vacío -->
+      @else if (products().length === 0) {
         <div class="empty-state">
           <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -115,23 +121,28 @@
           <h3>No se encontraron productos</h3>
           <p>Intenta con otra búsqueda o categoría</p>
         </div>
-      } @else {
-        <!-- Grid de productos -->
+      } 
+      
+      <!-- Grid de productos -->
+      @else {
         <div class="products-grid">
           @for (product of products(); track product.id) {
             <article class="product-card">
               <div class="product-image-container">
                 <img 
-                  [src]="product.imagen_url || '/assets/images/placeholder.png'" 
-                  [alt]="product.nombre"
-                  class="product-image">
+                  [src]="product.imagen_url || 'assets/img/placeholder.png'" 
+                  [alt]="product.nombre || 'Producto'"
+                  class="product-image"
+                  (error)="$any($event.target).src='assets/img/placeholder.png'">
                 
+                <!-- Badge de descuento -->
                 @if (tieneDescuento(product)) {
                   <span class="discount-badge">
                     -{{ calcularDescuento(product) }}%
                   </span>
                 }
 
+                <!-- Botón de favoritos -->
                 <button class="favorite-btn" aria-label="Agregar a favoritos">
                   <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -141,27 +152,34 @@
               </div>
 
               <div class="product-info">
-                <h3 class="product-name">{{ product.nombre }}</h3>
+                <h3 class="product-name">{{ product.nombre || 'Sin nombre' }}</h3>
                 
+                <!-- Precios -->
                 <div class="product-pricing">
-                  @if (tieneDescuento(product)) {
-                    <div class="price-group">
-                      <span class="price-original">${{ product.precio.toFixed(2) }}</span>
-                      <span class="price-final">${{ getPrecioFinal(product).toFixed(2) }}</span>
-                    </div>
+                  @if (product.precio != null && product.precio !== undefined) {
+                    @if (tieneDescuento(product)) {
+                      <div class="price-group">
+                        <span class="price-original">${{ product.precio.toFixed(2) }}</span>
+                        <span class="price-final">${{ getPrecioFinal(product).toFixed(2) }}</span>
+                      </div>
+                    } @else {
+                      <span class="price-final">${{ product.precio.toFixed(2) }}</span>
+                    }
                   } @else {
-                    <span class="price-final">${{ product.precio.toFixed(2) }}</span>
+                    <span class="price-final">Precio no disponible</span>
                   }
                 </div>
 
+                <!-- Botón agregar al carrito -->
                 <button 
                   class="add-to-cart-btn"
-                  [disabled]="product.stock <= 0 || addingToCart() === product.id"
+                  [disabled]="!product.stock || product.stock <= 0 || addingToCart() === product.id"
                   (click)="addToCart(product)">
                   @if (addingToCart() === product.id) {
                     <span class="btn-spinner"></span>
-                  } @else if (product.stock <= 0) {
-                    Agotado
+                    <span>Agregando...</span>
+                  } @else if (!product.stock || product.stock <= 0) {
+                    <span>Agotado</span>
                   } @else {
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 

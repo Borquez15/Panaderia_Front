@@ -1,148 +1,167 @@
+// src/app/pages/perfil/registrar_empresa/registrar-empresa.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { RouterLink, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { EmpresaService, EmpresaCreate, PanaderiaCreate } from '../../../services/empresa.service';
 
 @Component({
   selector: 'app-registrar-empresa',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './registrar-empresa.component.html',
   styleUrls: ['./registrar_empresa.component.css']
 })
 export class RegistrarEmpresaComponent {
-  tipoRegistro: 'empresa' | 'panaderia' = 'empresa';
-  form: FormGroup;
+  tipoSeleccionado: 'empresa' | 'panaderia' | null = null;
   isSubmitting = false;
-  mensaje = '';
-  mensajeError = false;
+  mensajeExito = '';
+  mensajeError = '';
 
-  private apiUrl = environment.apiUrl;
+  // Formulario de Empresa
+  formEmpresa: EmpresaCreate = {
+    nombre_comercial: '',
+    razon_social: '',
+    rfc: '',
+    tipo_empresa: '',
+    email_facturacion: '',
+    telefono: '',
+    telefono_alternativo: '',
+    calle_fiscal: '',
+    numero_exterior_fiscal: '',
+    numero_interior_fiscal: '',
+    colonia_fiscal: '',
+    ciudad_fiscal: '',
+    estado_fiscal: '',
+    codigo_postal_fiscal: ''
+  };
+
+  // Formulario de Panadería
+  formPanaderia: PanaderiaCreate = {
+    nombre: '',
+    descripcion: '',
+    email: '',
+    telefono: '',
+    whatsapp: '',
+    calle: '',
+    numero_exterior: '',
+    numero_interior: '',
+    colonia: '',
+    ciudad: '',
+    estado: '',
+    codigo_postal: ''
+  };
 
   constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
+    private empresaService: EmpresaService,
     private router: Router
-  ) {
-    this.form = this.createForm();
-    this.aplicarValidadores();
-  }
+  ) {}
 
-  private createForm(): FormGroup {
-    return this.fb.group({
-      // Empresa
-      nombre_comercial: [''],
-      razon_social: [''],
-      rfc: [''],
-      tipo_empresa: [''],
-      email_facturacion: [''],
-      telefono: [''],
-      telefono_alternativo: [''],
-      calle_fiscal: [''],
-      numero_exterior_fiscal: [''],
-      numero_interior_fiscal: [''],
-      colonia_fiscal: [''],
-      ciudad_fiscal: [''],
-      estado_fiscal: [''],
-      codigo_postal_fiscal: [''],
-
-      // Panadería
-      nombre: [''],
-      descripcion: [''],
-      email: [''],
-      whatsapp: [''],
-      calle: [''],
-      numero_exterior: [''],
-      numero_interior: [''],
-      colonia: [''],
-      ciudad: [''],
-      estado: [''],
-      codigo_postal: [''],
-
-      // Común
-      notas: ['']
-    });
-  }
-
-  cambiarTipo(tipo: 'empresa' | 'panaderia'): void {
-    this.tipoRegistro = tipo;
-    this.form.reset();
-    this.aplicarValidadores();
-  }
-
-  private aplicarValidadores(): void {
-    // Limpiar validadores
-    Object.keys(this.form.controls).forEach(key => {
-      this.form.get(key)?.clearValidators();
-      this.form.get(key)?.updateValueAndValidity();
-    });
-
-    if (this.tipoRegistro === 'empresa') {
-      // Validadores para empresa
-      this.form.get('nombre_comercial')?.setValidators([Validators.required]);
-      this.form.get('razon_social')?.setValidators([Validators.required]);
-      this.form.get('rfc')?.setValidators([Validators.required, Validators.minLength(12)]);
-      this.form.get('tipo_empresa')?.setValidators([Validators.required]);
-      this.form.get('email_facturacion')?.setValidators([Validators.required, Validators.email]);
-      this.form.get('telefono')?.setValidators([Validators.required]);
-      this.form.get('calle_fiscal')?.setValidators([Validators.required]);
-      this.form.get('numero_exterior_fiscal')?.setValidators([Validators.required]);
-      this.form.get('colonia_fiscal')?.setValidators([Validators.required]);
-      this.form.get('ciudad_fiscal')?.setValidators([Validators.required]);
-      this.form.get('estado_fiscal')?.setValidators([Validators.required]);
-      this.form.get('codigo_postal_fiscal')?.setValidators([Validators.required]);
-    } else {
-      // Validadores para panadería
-      this.form.get('nombre')?.setValidators([Validators.required]);
-      this.form.get('email')?.setValidators([Validators.required, Validators.email]);
-      this.form.get('telefono')?.setValidators([Validators.required]);
-      this.form.get('calle')?.setValidators([Validators.required]);
-      this.form.get('numero_exterior')?.setValidators([Validators.required]);
-      this.form.get('colonia')?.setValidators([Validators.required]);
-      this.form.get('ciudad')?.setValidators([Validators.required]);
-      this.form.get('estado')?.setValidators([Validators.required]);
-      this.form.get('codigo_postal')?.setValidators([Validators.required]);
-    }
-
-    // Actualizar validez
-    Object.keys(this.form.controls).forEach(key => {
-      this.form.get(key)?.updateValueAndValidity();
-    });
-  }
-
-  onSubmit(): void {
-    if (this.form.invalid) return;
+  registrarEmpresa(): void {
+    if (this.isSubmitting) return;
 
     this.isSubmitting = true;
-    this.mensaje = '';
-    this.mensajeError = false;
+    this.mensajeError = '';
+    this.mensajeExito = '';
 
-    const endpoint = this.tipoRegistro === 'empresa'
-      ? `${this.apiUrl}/api/mis-empresas/registrar-empresa`
-      : `${this.apiUrl}/api/mis-empresas/registrar-panaderia`;
+    console.log('📤 Registrando empresa:', this.formEmpresa);
 
-    const data = this.form.value;
-
-    this.http.post(endpoint, data).subscribe({
-      next: () => {
-        this.mensaje = `${this.tipoRegistro === 'empresa' ? 'Empresa' : 'Panadería'} registrada exitosamente. Redirigiendo...`;
-        this.mensajeError = false;
-
+    this.empresaService.registrarEmpresa(this.formEmpresa).subscribe({
+      next: (empresa) => {
+        console.log('✅ Empresa registrada:', empresa);
+        this.isSubmitting = false;
+        this.mensajeExito = `¡Empresa "${empresa.nombre_comercial}" registrada exitosamente!`;
+        
+        // Redirigir después de 2 segundos
         setTimeout(() => {
           this.router.navigate(['/perfil/mis-empresas']);
         }, 2000);
       },
-      error: (error) => {
-        this.mensaje = error.error?.detail || 'Error al registrar. Intenta de nuevo.';
-        this.mensajeError = true;
+      error: (err) => {
+        console.error('❌ Error al registrar empresa:', err);
         this.isSubmitting = false;
+
+        if (err.status === 409) {
+          this.mensajeError = 'Ya existe una empresa con ese RFC';
+        } else if (err.status === 400) {
+          this.mensajeError = 'Datos inválidos. Revisa el formulario.';
+        } else if (err.status === 401) {
+          this.mensajeError = 'Sesión expirada. Por favor inicia sesión nuevamente.';
+        } else {
+          this.mensajeError = err.error?.detail || 'Error al registrar la empresa. Intenta de nuevo.';
+        }
       }
     });
   }
 
-  cancelar(): void {
-    this.router.navigate(['/perfil']);
+  registrarPanaderia(): void {
+    if (this.isSubmitting) return;
+
+    this.isSubmitting = true;
+    this.mensajeError = '';
+    this.mensajeExito = '';
+
+    console.log('📤 Registrando panadería:', this.formPanaderia);
+
+    this.empresaService.registrarPanaderia(this.formPanaderia).subscribe({
+      next: (panaderia) => {
+        console.log('✅ Panadería registrada:', panaderia);
+        this.isSubmitting = false;
+        this.mensajeExito = `¡Panadería "${panaderia.nombre}" registrada exitosamente!`;
+        
+        // Redirigir después de 2 segundos
+        setTimeout(() => {
+          this.router.navigate(['/perfil/mis-empresas']);
+        }, 2000);
+      },
+      error: (err) => {
+        console.error('❌ Error al registrar panadería:', err);
+        this.isSubmitting = false;
+
+        if (err.status === 400) {
+          this.mensajeError = 'Datos inválidos. Revisa el formulario.';
+        } else if (err.status === 401) {
+          this.mensajeError = 'Sesión expirada. Por favor inicia sesión nuevamente.';
+        } else {
+          this.mensajeError = err.error?.detail || 'Error al registrar la panadería. Intenta de nuevo.';
+        }
+      }
+    });
+  }
+
+  limpiarFormulario(): void {
+    if (this.tipoSeleccionado === 'empresa') {
+      this.formEmpresa = {
+        nombre_comercial: '',
+        razon_social: '',
+        rfc: '',
+        tipo_empresa: '',
+        email_facturacion: '',
+        telefono: '',
+        telefono_alternativo: '',
+        calle_fiscal: '',
+        numero_exterior_fiscal: '',
+        numero_interior_fiscal: '',
+        colonia_fiscal: '',
+        ciudad_fiscal: '',
+        estado_fiscal: '',
+        codigo_postal_fiscal: ''
+      };
+    } else {
+      this.formPanaderia = {
+        nombre: '',
+        descripcion: '',
+        email: '',
+        telefono: '',
+        whatsapp: '',
+        calle: '',
+        numero_exterior: '',
+        numero_interior: '',
+        colonia: '',
+        ciudad: '',
+        estado: '',
+        codigo_postal: ''
+      };
+    }
   }
 }
